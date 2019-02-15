@@ -2,37 +2,18 @@ var tools = [
     {
         name: 'bold',
         icon: 'B',
-        check: /\*{2}.*\*{2}/g,
+        check: /\*.*?\*/g,
         replaceText: function(str) {
             var replaced = "";
             var match = str.match(this.check);
             if (match != null) {
                 match.forEach(sub => {
                     var strong = document.createElement("strong");
-                    var newStr = sub.replace(/\*{2}/g, "");
-                    var node = document.createTextNode(newStr);
-                    strong.appendChild(node);
-                    replaced = str.replace(sub, strong.outerHTML);
-                });
-                return replaced;
-            }
-        },
-        decorator: '**'
-    },
-    {
-        name: 'italic',
-        icon: 'I',
-        check: /\*.*\*/g,
-        replaceText: function(str) {
-            var replaced = "";
-            var match = str.match(this.check);
-            if (match != null) {
-            match.forEach(sub => {
-                    var em = document.createElement("em");
                     var newStr = sub.replace(/\*/g, "");
-                    var node = document.createTextNode(newStr);
-                    em.appendChild(node);
-                    replaced = str.replace(sub, em.outerHTML);
+                    //var node = document.createTextNode(newStr);
+                    strong.appendChild(newStr);
+                    replaced = str.replace(sub, strong.outerHTML);
+                    str = replaced;
                 });
                 return replaced;
             }
@@ -40,9 +21,30 @@ var tools = [
         decorator: '*'
     },
     {
+        name: 'italic',
+        icon: 'I',
+        check: /#.*?#/g,
+        replaceText: function(str) {
+            var replaced = "";
+            var match = str.match(this.check);
+            if (match != null) {
+            match.forEach(sub => {
+                    var em = document.createElement("em");
+                    var newStr = sub.replace(/#/g, "");
+                    var node = document.createTextNode(newStr);
+                    em.appendChild(node);
+                    replaced = str.replace(sub, em.outerHTML);
+                    str = replaced;
+                });
+                return replaced;
+            }
+        },
+        decorator: '#'
+    },
+    {
         name: 'underline',
         icon: 'U',
-        check: /_.*_/g,
+        check: /_.*?_/g,
         replaceText: function(str) {
             var replaced = "";
             var match = str.match(this.check);
@@ -54,6 +56,7 @@ var tools = [
                     var node = document.createTextNode(newStr);
                     span.appendChild(node);
                     replaced = str.replace(sub, span.outerHTML);
+                    str = replaced;
                 });
                 return replaced;
             }
@@ -63,7 +66,7 @@ var tools = [
     {
         name: 'strike',
         icon: 'S',
-        check: /~.*~/g,
+        check: /~.*?~/g,
         replaceText: function(str) {
             var replaced = "";
             var match = str.match(this.check)
@@ -75,6 +78,7 @@ var tools = [
                     var node = document.createTextNode(newStr);
                     span.appendChild(node);
                     replaced = str.replace(sub, span.outerHTML);
+                    str = replaced;
                 });
                 return replaced;
             }
@@ -104,10 +108,14 @@ class Wealthy {
         editor.onkeyup = updateOutput;
 
         function updateOutput(e) {
+            //output.innerHTML = editor.value;
             var editorText = editor.value;      
             tools.forEach(tool => {
                 var newText = tool.replaceText(editorText);
-                output.innerHTML = newText;
+                if (newText) {
+                    output.innerHTML = newText;
+                }
+                editorText = output.innerHTML;
             });
         }
 
@@ -175,5 +183,5 @@ let textEditor = new Wealthy('editor', {
         name: 'theme',
         path: ''
     },
-    toolbar: ['bold', 'italic', 'underline']
+    toolbar: ['bold', 'italic', 'underline', 'strike']
 });
