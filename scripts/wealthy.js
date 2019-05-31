@@ -1,22 +1,32 @@
 class Wealthy extends HTMLElement {
     constructor() {
         super();
-        // set up shadow DOM and editor/toolbar
-        const shadow = this.attachShadow({mode: 'open'});
+        // set up and editor/toolbar
+        let container = document.createElement("div");
         let wealthy = document.createElement("div");
         let toolbar = document.createElement("div");
+        let config = null;
         
-        // basic styles
-        wealthy.style.width = "600px";
-        wealthy.style.height = "275px";
-        wealthy.style.backgroundColor = "#555";
-        wealthy.style.padding = "8px"
+        // add classes and other attributes
+        container.className = "wealthy-cont"
+        wealthy.className = "wealthy";
         wealthy.contentEditable = true;
+        toolbar.className = "wealthy-tools"
+
+        // get/set config
+        if (this.hasAttribute('config')) {
+            config = this.getAttribute('config');
+
+            wealthy.innerHTML = config.placeholder;
+        }
 
         //wealthy.innerHTML = "Here's the <strong>text</strong>!"
 
-        // attach to shadow DOM
-        shadow.appendChild(wealthy);
+        // attach to DOM
+        if (config)
+            container.appendChild(toolbar);
+        container.appendChild(wealthy);
+        this.appendChild(container);
     }
 }
 
