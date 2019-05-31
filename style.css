@@ -1,8 +1,6 @@
 body {
     background-color: #222;
     color: ghostwhite;
-}
-
-#editor {
-    width: 600px;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 15px;
 }
