@@ -1,11 +1,14 @@
 class Wealthy extends HTMLElement {
-    constructor() {
+    constructor(selector, config) {
         super();
+        this.selector = selector;
+        this.config = config;
+        this.wealthy = (selector, config) => new Wealthy(selector, config);
         // set up and editor/toolbar
         let container = document.createElement("div");
         let wealthy = document.createElement("div");
         let toolbar = document.createElement("div");
-        let config = null;
+        //let config = null;
         
         // add classes and other attributes
         container.className = "wealthy-cont"
@@ -18,6 +21,9 @@ class Wealthy extends HTMLElement {
             config = this.getAttribute('config');
 
             wealthy.innerHTML = config.placeholder;
+        }
+        if (this.config) {
+            
         }
 
         //wealthy.innerHTML = "Here's the <strong>text</strong>!"
